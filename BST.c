@@ -8,14 +8,15 @@ struct bst{
 struct bst *root=NULL;
 
 void insert();
-void inorder();
-void preorder();
+void inorder(struct bst* t);
+void preorder(struct bst* t);
+void deletebst();
 
 int main(){
 	int c, el;
 	struct bst *t;
 	do{
-		printf("enter 1 for insert, 2 for inorder, 3 for post order, 4 for preorder\n");
+		printf("enter 1 for insert, 2 for inorder, 3 for post order, 4 for preorder\n5 for delete");
 		scanf("%d",&c);
 	switch(c){
 		case 1:
@@ -25,8 +26,10 @@ int main(){
 		     break;
 		case 4: preorder(root);
 		     break;
+		case 5: deletebst();
+		     break;
 		default:
-				printf("enter correct");
+				printf("enter correct value\n");
 				
 	}	
 	}while(c!=0);
@@ -42,7 +45,9 @@ void insert(){
 	t->data=el;
 	t->l=NULL;
 	t->r=NULL;	
-	parent= root;
+	//parent= root;//
+         parent=NULL;
+	curr=root;
 	if(root==NULL){
 		root=t;
 	}
@@ -89,3 +94,90 @@ void preorder(struct bst *t){
 	}
 	
 }
+
+
+void deletebst(){
+	 int el;
+    printf("Enter the element to delete: ");
+    scanf("%d", &el);
+      struct bst *parent = NULL;
+    struct bst *curr = root;
+    
+    // Search for the node to delete and keep track of its parent
+    while (curr!= NULL && curr->data!=el) {
+        parent = curr;
+        if (el< curr->data) {
+            curr= curr->l;
+        }
+        else {
+            curr= curr->r;
+        }
+    }
+// If the element was not found
+    if (curr== NULL) {
+        printf("Element not found.\n");
+        return;
+    }
+
+    // Case 1: Node with no child
+    if (curr->l == NULL && curr->r == NULL) {
+        // If it's the root node
+        if (parent == NULL) {
+            free(root);
+            root = NULL;
+        }
+        else if (parent->l == curr) {
+            free(parent->l);
+            parent->l = NULL;
+        }
+        else {
+            free(parent->r);
+            parent->r = NULL;
+        }
+    }
+
+    // Case 2: Node with one child
+    else if (curr->l == NULL || curr->r == NULL) {
+        struct bst *child = (curr->l != NULL) ? curr->l : curr->r;
+
+        // If it's the root node
+        if (parent == NULL) {
+            free(root);
+            root = child;
+        }
+        else if (parent->l == curr) {
+            free(parent->l);
+            parent->l = child;
+        }
+        else {
+            free(parent->r);
+            parent->r = child;
+        }
+    }
+else {
+        struct bst *successor_parent = curr;
+        struct bst *successor = curr->r;
+
+        // Find the in-order successor (smallest node in the right subtree)
+        while (successor->l != NULL) {
+            successor_parent = successor;
+            successor = successor->l;
+        }
+
+        // Copy the successor's data to the current node
+        curr->data = successor->data;
+
+        // Delete the in-order successor
+        if (successor_parent->l == successor) {
+            successor_parent->l = successor->r;
+        }
+        else {
+            successor_parent->r = successor->r;
+        }
+
+        free(successor);
+    }
+
+    printf("Element deleted successfully.\n");
+}
+
