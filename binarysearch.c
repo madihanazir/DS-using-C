@@ -19,7 +19,7 @@ int binarysearch(struct Array arr, int key){
 		return mid;
 		else if (key<arr.a[mid])
 		h= mid-1;
-		else l= mid-1;
+		else l= mid+1;
 	}
 	return -1;
 
