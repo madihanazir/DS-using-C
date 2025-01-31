@@ -16,7 +16,7 @@ int main(){
 	/*for(i=0; i<5; i++)
 	printf("%d\n", p[i]); 
 	//now suppose this 5 sized array isnt sufficent & we need to increase size//
-	//so we create another pointer q intended for a larger size//
+	//so we create another pointer q of larger size//
 	*/
 	q= (int*)malloc (10*sizeof(int));
 	//transfer values of p to q array// 
